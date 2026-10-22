@@ -1,0 +1,41 @@
+# Deploys the gh-pages branch (cheat sheet site) to GitHub Pages.
+# Перенеси этот файл в .github/workflows/pages.yml и запушь в main
+# (нужен токен с правами `workflow`), либо включи Pages вручную:
+# Settings → Pages → Source: Deploy from a branch → gh-pages → /(root).
+
+name: Deploy StyleKit cheat sheet to Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout gh-pages (cheat sheet site)
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact (site root)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
