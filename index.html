@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StyleKit — шпаргалка по 8 стилям</title>
+<meta name="description" content="Интерактивная шпаргалка по дизайн-стилям StyleKit: живые демо, палитры, токены и готовые фразы для дизайн-агента.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+<style>
+/* ============ SHELL ============ */
+:root{--bg:#0e0f13;--panel:#171821;--panel2:#1d1f2a;--line:#2a2c38;--text:#e8e9ee;--muted:#9a9daa;--accent:#7c5cff;--accent2:#22d3ee;--ok:#06d6a0;--bad:#ff6b6b}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;line-height:1.6}
+a{color:var(--accent2);text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:ui-monospace,'JetBrains Mono','Cascadia Code',Consolas,monospace;font-size:.85em;background:#0a0b0f;border:1px solid var(--line);border-radius:6px;padding:1px 6px;white-space:nowrap}
+
+/* layout */
+.layout{display:flex;min-height:100vh}
+main{flex:1;padding:48px clamp(16px,4vw,56px) 120px;max-width:1060px}
+
+/* sidebar */
+nav.side{position:sticky;top:0;height:100vh;width:272px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);padding:24px 14px;overflow-y:auto}
+.brand{font-weight:800;font-size:18px;letter-spacing:-.02em;padding:0 10px 4px}
+.brand span{color:var(--accent)}
+.brand small{display:block;font-weight:500;font-size:11px;color:var(--muted);letter-spacing:0}
+.nav-sec{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);padding:18px 10px 6px}
+nav.side a.item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;color:var(--text);font-size:14px;text-decoration:none;border:1px solid transparent}
+nav.side a.item:hover{background:var(--panel2);text-decoration:none}
+nav.side a.item.active{background:rgba(124,92,255,.14);border-color:rgba(124,92,255,.4)}
+nav.side a.item .num{width:24px;height:24px;border-radius:8px;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+nav.side a.item.active .num{background:var(--accent);border-color:var(--accent);color:#fff}
+.repo-link{margin:18px 10px 0;font-size:12px;color:var(--muted)}
+
+/* mobile tabs */
+.mtabs{display:none}
+@media(max-width:920px){
+  .layout{flex-direction:column}
+  nav.side{display:none}
+  .mtabs{display:flex;position:sticky;top:0;z-index:50;background:var(--panel);border-bottom:1px solid var(--line);overflow-x:auto;padding:10px 12px;gap:8px}
+  .mtabs a{flex-shrink:0;padding:7px 12px;border-radius:999px;border:1px solid var(--line);color:var(--text);font-size:13px;background:var(--panel2)}
+  .mtabs a.active{background:var(--accent);border-color:var(--accent)}
+}
+
+/* sections */
+section{padding-top:26px}
+.sect-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.sect-head .num{font-size:15px;font-weight:800;color:#fff;background:var(--accent);border-radius:10px;padding:3px 11px}
+h2{font-size:clamp(24px,3vw,32px);font-weight:800;letter-spacing:-.02em}
+.runame{color:var(--muted);font-size:15px;font-weight:600}
+.desc{color:var(--muted);max-width:70ch;margin:10px 0 8px}
+.desc b{color:var(--text)}
+.hint{font-size:13.5px;color:var(--muted)}
+.hint b{color:var(--text)}
+
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:18px}
+.panel h3{font-size:14px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:14px;font-weight:700}
+
+/* palette */
+.pal{display:flex;gap:10px;flex-wrap:wrap}
+.sw{position:relative;border-radius:10px;min-width:112px;flex:0 1 auto;cursor:pointer;border:1px solid var(--line);overflow:hidden}
+.sw .chip{height:52px;display:block}
+.sw .lab{display:flex;justify-content:space-between;gap:10px;padding:6px 9px;font-size:11px;background:var(--panel2);color:var(--muted);font-family:ui-monospace,monospace}
+.sw:hover{border-color:var(--accent)}
+.sw .tip{position:absolute;top:6px;right:8px;font-size:10px;background:#000a;border-radius:6px;padding:2px 6px;opacity:0;transition:.15s}
+.sw:hover .tip{opacity:1}
+
+/* demo frame */
+.demo{border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-top:10px}
+.demo-tag{font-size:11px;color:var(--muted);padding:8px 14px;background:#0a0b0f;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+
+/* copy phrases */
+.phrases{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.copybtn{display:inline-flex;align-items:center;gap:7px;background:var(--panel2);border:1px solid var(--line);color:var(--text);font:inherit;font-size:13px;padding:8px 13px;border-radius:999px;cursor:pointer;transition:.15s}
+.copybtn:hover{border-color:var(--accent);background:rgba(124,92,255,.12)}
+.copybtn.main{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.copybtn.main:hover{filter:brightness(1.15)}
+.copybtn svg{width:14px;height:14px;opacity:.8}
+
+/* token table */
+table.tok{width:100%;border-collapse:collapse;font-size:13.5px}
+table.tok th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line)}
+table.tok td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+table.tok tr:last-child td{border-bottom:none}
+table.tok td:first-child{color:var(--muted);white-space:nowrap}
+
+/* do / dont */
+.dodont{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+@media(max-width:720px){.dodont{grid-template-columns:1fr}}
+.dd{border:1px solid var(--line);border-radius:16px;padding:16px 18px;background:var(--panel)}
+.dd h4{font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.dd.do h4{color:var(--ok)}.dd.dont h4{color:var(--bad)}
+.dd{position:relative}
+.dd ul{list-style:none}
+.dd li{font-size:13.5px;padding:5px 0 5px 22px;position:relative;color:#c8cad4}
+.dd.do li::before{content:"✓";position:absolute;left:2px;color:var(--ok);font-weight:700}
+.dd.dont li::before{content:"✕";position:absolute;left:2px;color:var(--bad);font-weight:700}
+
+/* overview grid */
+.ov-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-top:18px}
+.ov-card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;color:var(--text);transition:.18s}
+.ov-card:hover{transform:translateY(-3px);border-color:var(--accent);text-decoration:none}
+.ov-bar{height:34px;display:flex}
+.ov-bar i{flex:1}
+.ov-card .body{padding:12px 14px}
+.ov-card .body b{font-size:14.5px}
+.ov-card .body span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.howto{margin-top:8px}
+.howto ol{margin:10px 0 0 20px;color:var(--muted)}
+.howto li{margin:6px 0;font-size:14px}
+.howto li b{color:var(--text)}
+
+/* toast */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--accent);color:#fff;font-size:14px;font-weight:600;padding:10px 20px;border-radius:999px;opacity:0;pointer-events:none;transition:.25s;z-index:99;box-shadow:0 8px 30px rgba(124,92,255,.45)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ============ 1. DOODLE DEMO ============ */
+.dd1{background:#fffef5;color:#2c2c2c;padding:34px 26px;font-family:Verdana,'Segoe UI',system-ui,sans-serif;background-image:repeating-linear-gradient(transparent,transparent 31px,rgba(44,44,44,.09) 31px,rgba(44,44,44,.09) 32px),linear-gradient(to right,transparent 36px,rgba(255,107,107,.5) 36px,rgba(255,107,107,.5) 38px,transparent 38px)}
+.dd1 .d-title{font-size:30px;font-weight:800;max-width:20ch}
+.dd1 .d-title u{text-decoration:wavy #ff6b6b underline;text-underline-offset:6px;text-decoration-thickness:2.5px}
+.dd1 .d-row{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px;align-items:flex-start}
+.dd1 .btn{font:inherit;font-weight:700;font-size:14px;padding:10px 18px;border:2px dashed #2c2c2c;border-radius:4px;background:#fffef5;box-shadow:3px 3px 0 #4ecdc4;cursor:pointer;transition:all .2s ease-in-out}
+.dd1 .btn:hover{box-shadow:6px 6px 0 #4ecdc4;transform:rotate(-1deg)}
+.dd1 .btn:active{transform:translate(2px,2px);box-shadow:none}
+.dd1 .btn.red{background:#ff6b6b;color:#2c2c2c;box-shadow:3px 3px 0 #2c2c2c}
+.dd1 .btn.red:hover{box-shadow:6px 6px 0 #ffd93d}
+.dd1 .card{position:relative;background:#fff;border:2px dashed #2c2c2c;border-radius:4px;padding:16px 16px 14px;box-shadow:4px 4px 0 #4ecdc4;max-width:250px;transform:rotate(-1.2deg);font-size:13px}
+.dd1 .card .tape{position:absolute;top:-11px;left:50%;transform:translateX(-50%) rotate(3deg);width:74px;height:22px;background:rgba(255,217,61,.75)}
+.dd1 .badge{display:inline-block;font-size:11.5px;font-weight:700;padding:3px 10px;border:2px dashed #2c2c2c;border-radius:999px;background:#ffd93d;transform:rotate(2deg)}
+.dd1 .in{font:inherit;font-size:13px;padding:9px 12px;border:2px dashed #2c2c2c;border-radius:4px;background:#fffef5;width:230px}
+.dd1 .star{display:inline-block;animation:jit 2.2s infinite}
+@keyframes jit{0%,92%,100%{transform:rotate(0)}94%{transform:rotate(-4deg) translateY(-1px)}96%{transform:rotate(3deg)}98%{transform:rotate(-2deg)}}
+
+/* ============ 2. PARALLAX DEMO ============ */
+.dd2{position:relative;height:380px;overflow-y:auto;scrollbar-width:thin;background:#0f172a;color:#fff;font-family:'Segoe UI',system-ui,sans-serif}
+.dd2 .sec{min-height:100%;display:flex;flex-direction:column;justify-content:center;padding:40px 34px;background-attachment:fixed;background-size:cover;background-position:center}
+.dd2 .s-a{background-image:linear-gradient(200deg,#1e3a5fdd 0%,#3b82f6aa 55%,#0ea5e999 100%),radial-gradient(ellipse at 70% 20%,#1e3a5f,#0f172a)}
+.dd2 .s-b{background-image:linear-gradient(160deg,#0f172add 0%,#1e3a5fbb 60%,#c559f055 120%),radial-gradient(circle at 20% 80%,#243b66,#0f172a)}
+.dd2 .s-c{background-image:linear-gradient(120deg,#0ea5e9cc,#93c5fdaa 50%,#c559f0aa);min-height:60%}
+.dd2 h4{font-size:30px;font-weight:800;letter-spacing:-.01em;text-shadow:0 2px 18px rgba(0,0,0,.45)}
+.dd2 p{max-width:56ch;background:rgba(255,255,255,.14);backdrop-filter:blur(3px);border:1px solid rgba(255,255,255,.2);border-radius:16px;padding:14px 18px;margin-top:12px;font-size:14px}
+.dd2 .sc{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:11px;color:#ffffffbb;background:#0f172ab0;border:1px solid #ffffff22;border-radius:999px;padding:4px 12px;z-index:2}
+
+/* ============ 3. SHADER DEMO ============ */
+.dd3{position:relative;color:#EDEEF2;font-family:'Segoe UI',system-ui,sans-serif;background:#08090D}
+.dd3 canvas{display:block;width:100%;height:240px}
+.dd3 .glass{position:absolute;inset:auto 18px 18px;left:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:16px;padding:16px 20px;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+.dd3 h4{font-size:24px;font-weight:600;color:#fff;letter-spacing:-.02em}
+.dd3 p{font-size:13px;color:rgba(237,238,242,.7);margin-top:4px}
+.dd3 .b{position:absolute;top:18px;right:18px;background:rgba(124,92,255,.16);border:1px solid rgba(124,92,255,.45);color:#cfc4ff;border-radius:12px;padding:9px 16px;font-size:13px;font-weight:600;backdrop-filter:blur(12px);transition:all .3s ease-out}
+.dd3 .b:hover{box-shadow:0 10px 40px rgba(124,92,255,.35)}
+.dd3 .b:active{transform:scale(.98)}
+
+/* ============ 4. LIQUID GLASS DEMO ============ */
+.dd4{position:relative;padding:40px 28px;color:#fff;font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;background:radial-gradient(circle at 15% 20%,#007AFF,transparent 42%),radial-gradient(circle at 85% 25%,#FF2D55,transparent 45%),radial-gradient(circle at 50% 95%,#a855f7,transparent 50%),radial-gradient(circle at 90% 85%,#4ecdc4,transparent 40%),#12101a}
+.dd4 .blob{position:absolute;border-radius:50%;filter:blur(2px);opacity:.65}
+.dd4 .bl1{width:110px;height:110px;background:#ff6b6b;top:-22px;left:38%}
+.dd4 .bl2{width:70px;height:70px;background:#ffd93d;bottom:24px;right:14%}
+.dd4 .gcard{position:relative;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:24px;backdrop-filter:blur(40px) saturate(1.8);-webkit-backdrop-filter:blur(40px) saturate(1.8);box-shadow:0 14px 34px rgba(0,0,0,.28);padding:22px;max-width:430px;margin:0 auto}
+.dd4 h4{font-size:30px;font-weight:900;letter-spacing:-.02em;background:linear-gradient(to right,#a855f7,#ff2d92 55%,#a855f7);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-stroke:2px #4ecdc4;text-shadow:4px 4px 0 rgba(0,0,0,.45)}
+.dd4 p{font-size:13.5px;color:rgba(255,255,255,.82);margin-top:8px;text-shadow:0 0 20px rgba(78,205,196,.55)}
+.dd4 h5{font-size:14px;margin:2px 0 1px}
+.dd4 .row{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+.dd4 .gbtn{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:24px;padding:11px 22px;font-size:13.5px;font-weight:600;backdrop-filter:blur(24px) saturate(1.8);transition:all .5s ease-out;cursor:pointer}
+.dd4 .gbtn:hover{box-shadow:0 12px 34px rgba(168,85,247,.35)}
+.dd4 .gbtn:active{transform:scale(.98)}
+.dd4 .gbtn.hl{background:rgba(255,45,85,.28);border-color:rgba(255,45,85,.5)}
+
+/* ============ 5. PAPER CRAFT DEMO ============ */
+.dd5{background:#fdf6ee;color:#2d2d2d;padding:38px 30px;font-family:'Segoe UI',system-ui,sans-serif}
+.dd5 h4{font-size:32px;font-weight:800;color:#e85d75;max-width:24ch;line-height:1.05}
+.dd5 .r{display:flex;gap:20px;margin-top:22px;flex-wrap:wrap;align-items:flex-start}
+.dd5 .pcard{position:relative;background:#fff;border:2px solid #e0d8cc;border-radius:14px;padding:18px;font-size:13.5px;box-shadow:4px 4px 0 rgba(0,0,0,.08);transform:rotate(1deg);max-width:230px;transition:all .2s}
+.dd5 .pcard:hover{transform:translateY(-4px) rotate(0);box-shadow:6px 6px 0 rgba(0,0,0,.12)}
+.dd5 .pcard::after{content:"";position:absolute;inset:auto 20% -12px;height:12px;background:#5cb8a5;border-radius:0 0 10px 10px;transform:rotate(-2deg);box-shadow:2px 2px 0 rgba(0,0,0,.06)}
+.dd5 .pcard.b2{transform:rotate(-1.5deg)}
+.dd5 .pbtn{display:inline-block;background:#e85d75;color:#fff;font-weight:700;font-size:14px;border:none;border-radius:12px;padding:12px 22px;box-shadow:3px 3px 0 rgba(0,0,0,.1);cursor:pointer;transition:all .2s}
+.dd5 .pbtn:hover{transform:translateY(-1px);box-shadow:4px 4px 0 rgba(0,0,0,.14)}
+.dd5 .pbtn:active{transform:translateY(1px);box-shadow:1px 1px 0 rgba(0,0,0,.06)}
+.dd5 .chipc{display:inline-block;font-size:11px;font-weight:700;border-radius:999px;padding:4px 12px;color:#fff}
+
+/* ============ 6. BENTO DEMO ============ */
+.dd6{background:#fafafa;color:#18181b;padding:36px 26px;font-family:'Segoe UI',system-ui,sans-serif}
+.dd6 .grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:78px;gap:14px}
+@media(max-width:640px){.dd6 .grid{grid-template-columns:repeat(2,1fr)}}
+.dd6 .bcell{background:#fff;border:1px solid #e4e4e7;border-radius:16px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:16px;font-size:13px;display:flex;flex-direction:column;justify-content:flex-end;transition:all .2s ease-out}
+.dd6 .bcell:hover{transform:translateY(-2px) scale(1.01);box-shadow:0 10px 24px rgba(0,0,0,.1)}
+.dd6 .big{grid-column:span 2;grid-row:span 2}
+.dd6 .ico{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;font-size:17px;color:#fff;transition:transform .2s}
+.dd6 .bcell:hover .ico{transform:scale(1.12)}
+.dd6 h4{grid-column:span 4;font-size:26px;font-weight:700;letter-spacing:-.01em;align-self:center}
+.dd6 .c1{background:#3b82f6}.dd6 .c2{background:#8b5cf6}.dd6 .c3{background:#ec4899}.dd6 .c4{background:#f97316}
+
+/* ============ 7. HERO DEMO ============ */
+.dd7{position:relative;height:400px;color:#fff;font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;background:linear-gradient(180deg,rgba(0,0,0,.62),rgba(0,0,0,.28) 45%,rgba(0,0,0,.75)),radial-gradient(120% 90% at 70% 10%,#465678 0%,#232a3d 38%,#12131c 78%)}
+.dd7 .peaks{position:absolute;inset:auto 0 0;height:38%;background:linear-gradient(160deg,#2a3350 0 48%,transparent 48%),linear-gradient(200deg,#39445f 0 44%,transparent 44%)}
+.dd7 .inner{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:0 34px}
+.dd7 .kicker{font-size:12px;letter-spacing:.28em;text-transform:uppercase;border:2px solid #fff;border-radius:999px;padding:5px 14px;margin-bottom:16px}
+.dd7 h4{font-size:clamp(26px,4vw,40px);font-weight:800;max-width:20ch;line-height:1.05}
+.dd7 p{margin:12px 0 20px;font-size:14.5px;color:#ffffffcc;max-width:48ch}
+.dd7 .row{display:flex;gap:14px;flex-wrap:wrap}
+.dd7 .hbtn{border-radius:999px;padding:13px 26px;font-size:14px;font-weight:700;cursor:pointer;transition:all .3s;border:2px solid #fff}
+.dd7 .p{background:#fff;color:#12131c}
+.dd7 .p:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.5)}
+.dd7 .p:active{transform:translateY(0) scale(.98)}
+.dd7 .g{background:transparent;color:#fff}
+.dd7 .g:hover{background:rgba(255,255,255,.14)}
+.dd7 .scroll{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-size:11px;color:#ffffff99;animation:drop 1.8s infinite}
+@keyframes drop{0%{transform:translate(-50%,0)}50%{transform:translate(-50%,6px)}100%{transform:translate(-50%,0)}}
+
+/* ============ 8. DOPAMINE DEMO ============ */
+.dd8{padding:38px 28px;color:#17102a;font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(124deg,#ff006e 0%,#8338ec 46%,#3a86ff 100%)}
+.dd8 h4{font-size:clamp(26px,3.4vw,38px);font-weight:900;letter-spacing:-.03em;color:#fff;max-width:22ch;line-height:.98;text-shadow:0 3px 0 rgba(0,0,0,.18)}
+.dd8 .r{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-top:22px}
+.dd8 .dbtn{border:none;cursor:pointer;border-radius:999px;padding:14px 26px;font-size:14px;font-weight:800;transition:all .3s;box-shadow:0 8px 30px rgba(255,0,110,.4)}
+.dd8 .dbtn:hover{transform:scale(1.05)}
+.dd8 .dbtn:active{transform:scale(.95)}
+.dd8 .b1{background:#ffbe0b;color:#17102a}
+.dd8 .b2{background:#06d6a0;color:#17102a}
+.dd8 .dbadge{display:inline-flex;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:7px 15px;font-size:13px;font-weight:700;box-shadow:0 6px 22px rgba(58,134,255,.45)}
+.dd8 .dcard{background:#ffffff2b;border:1.5px solid #ffffff44;border-radius:26px;backdrop-filter:blur(8px);padding:16px 18px;max-width:250px;color:#fff;font-size:13.5px;box-shadow:0 8px 30px rgba(131,56,236,.4)}
+</style>
+</head>
+<body>
+<div id="toast">Скопировано ✓</div>
+
+<div class="mtabs">
+  <a href="#top" data-num="0">Обзор</a>
+  <a href="#s1" data-num="1">1. Doodle</a>
+  <a href="#s2" data-num="2">2. Parallax</a>
+  <a href="#s3" data-num="3">3. Shader</a>
+  <a href="#s4" data-num="4">4. Glass</a>
+  <a href="#s5" data-num="5">5. Paper</a>
+  <a href="#s6" data-num="6">6. Bento</a>
+  <a href="#s7" data-num="7">7. Hero</a>
+  <a href="#s8" data-num="8">8. Dopamine</a>
+</div>
+
+<div class="layout">
+<nav class="side">
+  <div class="brand">🎨 Style<span>Kit</span><small>шпаргалка · 8 стилей · v1</small></div>
+  <div class="nav-sec">Обзор</div>
+  <a class="item" href="#top" data-num="0"><span class="num">0</span> Как пользоваться</a>
+  <div class="nav-sec">Стили</div>
+  <a class="item" href="#s1" data-num="1"><span class="num">1</span> Hand-Drawn Doodle</a>
+  <a class="item" href="#s2" data-num="2"><span class="num">2</span> Parallax Sections</a>
+  <a class="item" href="#s3" data-num="3"><span class="num">3</span> Shader Gradient</a>
+  <a class="item" href="#s4" data-num="4"><span class="num">4</span> Apple Liquid Glass</a>
+  <a class="item" href="#s5" data-num="5"><span class="num">5</span> Paper Craft</a>
+  <a class="item" href="#s6" data-num="6"><span class="num">6</span> Bento Grid</a>
+  <a class="item" href="#s7" data-num="7"><span class="num">7</span> Fullscreen Hero</a>
+  <a class="item" href="#s8" data-num="8"><span class="num">8</span> Dopamine Design</a>
+  <div class="repo-link">Репозиторий: <a href="https://github.com/d1m40fficial/stylekit">d1m40fficial/stylekit</a><br>Токены: <a href="tokens/hand-drawn-doodle.tokens.json">tokens/*.tokens.json</a></div>
+</nav>
+
+<main>
+
+<!-- ============ OVERVIEW ============ -->
+<section id="top">
+  <div class="sect-head"><h2>Как пользоваться</h2></div>
+  <p class="desc">Это шпаргалка дизайн-кита <b>StyleKit</b>: 8 стилей — по вкладке на каждый. Открываешь стиль, смотришь живое демо и правила, копируешь готовую фразу и вставляешь агенту.</p>
+  <div class="panel howto">
+    <h3>Порядок</h3>
+    <ol>
+      <li><b>Выбери вкладку</b> — цифра + название останутся в истории ссылок: <code>…/stylekit/#4-apple-liquid-glass</code></li>
+      <li><b>Посмотри демо</b> — кнопки, карточки, анимации отрисованы в каждом стиле по-настоящему.</li>
+      <li><b>Скопируй фразу</b> кнопкой: например «тема целиком», «кнопки», «анимация скролла», «стеклянные панели».</li>
+      <li><b>Скажи агенту:</b> «возьми тему как в “Liquid Glass”», «возьми стиль кнопок из 2-го стиля», «возьми анимацию скролла из “Parallax Sections”» — агент-скилл <code>stylekit</code> примет это.</li>
+    </ol>
+  </div>
+  <div class="ov-grid" id="ovgrid"></div>
+</section>
+
+<!-- ============ STYLE 1 ============ -->
+<section id="s1" data-num="1">
+  <div class="sect-head"><span class="num">1</span><h2>Hand-Drawn Doodle</h2><span class="runame">Развёрнутый дудл · тетрадь с маркерами</span></div>
+  <p class="desc">Рисованные линии, дудл-иллюстрации, «тетрадный» фон из линованной бумаги, пунктирные рамки и жёсткие офсетные тени цвета маркеров. <b>Тёплый handmade-характер.</b> Анимация: стоп-моушен дрожание на hover.</p>
+  <div class="panel"><h3>Живое демо · notebook paper #fffef5</h3>
+    <div class="demo"><div class="demo-tag"><span>hover по кнопкам и карточке</span><span>фон: тетрадные линии + красная линия полей</span></div>
+      <div class="dd1">
+        <div class="d-title">Идеи на <u>набросать</u> прямо сейчас</div>
+        <div class="d-row">
+          <button class="btn red">Начать скетч</button>
+          <button class="btn">Сохранить в тетрадь</button>
+          <input class="in" placeholder="название заметки…">
+          <span class="badge">в процессе</span><span class="star">⭐</span>
+        </div>
+        <div class="d-row">
+          <div class="card"><div class="tape"></div><b>Карточка-стикер</b><br>скотч сверху, офсетная тень бирюзовым маркером, лёгкий наклон −1.2°</div>
+          <div class="card" style="transform:rotate(1.1deg)"><div class="tape" style="background:rgba(255,107,107,.6)"></div><b>Пунктирные рамки</b><br>border-2 border-dashed #2c2c2c · rounded-sm · никаких градиентов и blur</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="phrases">
+    <button class="copybtn main" data-copy="Возьми тему как в «Hand-Drawn Doodle» (stylekit, стиль #1). Токены: stylekit/tokens/hand-drawn-doodle.tokens.json (+ .css, .tailwind.preset.js); правила и запреты: stylekit/DESIGN_SPEC.md раздел 1.">📋 Тема целиком</button>
+    <button class="copybtn" data-copy="Возьми стиль кнопок из «Hand-Drawn Doodle» (stylekit #1): border-2 dashed #2c2c2c, rounded-sm, жёсткая офсетная тень 3px 3px 0 #4ecdc4, hover 6px 6px + лёгкий поворот, active прижатие paper-press.">Кнопки</button>
+    <button class="copybtn" data-copy="Возьми стиль карточек из «Hand-Drawn Doodle» (stylekit #1): фон бумажно-белый, border-2 dashed, offset shadow маркерным цветом, лёгкий наклон, декор «скотч»/«кнопка»/«скрепка».">Карточки</button>
+    <button class="copybtn" data-copy="Возьми hover-анимации из «Hand-Drawn Doodle» (stylekit #1): стоп-моушен дрожание (микроповороты/смещения), ink filling (утолщение контура), offset smudge, paper press на active (scale 0.98).">Анимации</button>
+    <button class="copybtn" data-copy="Возьми палитру из «Hand-Drawn Doodle» (stylekit #1): #2c2c2c / #fffef5 / #ff6b6b / #4ecdc4 / #ffd93d / #a98d16 — плоские цвета маркеров, без градиентов.">Палитра</button>
+    <button class="copybtn" data-copy="Возьми декоративные элементы из «Hand-Drawn Doodle» (stylekit #1): тетрадный линованный фон, красная линия полей, волнистые подчёркивания, скотч/кнопки/скрепки, рисованные звёздочки и загогулины SVG.">Декор</button>
+  </div>
+  <div class="panel"><h3>Токены</h3>
+    <table class="tok"><tr><th>Токен</th><th>Значение</th></tr>
+      <tr><td>Основной</td><td><code>#2c2c2c</code> · текст и границы</td></tr>
+      <tr><td>Вторичный</td><td><code>#fffef5</code> · бумага</td></tr>
+      <tr><td>Акценты</td><td><code>#ff6b6b</code> <code>#4ecdc4</code> <code>#ffd93d</code> <code>#a98d16</code></td></tr>
+      <tr><td>Border / Radius</td><td><code>border-2</code> dashed <code>rounded-sm</code></td></tr>
+      <tr><td>Тени</td><td><code>shadow-[3px_3px_0px_#4ecdc4]</code> → hover <code>[6px_6px_0px_#4ecdc4]</code></td></tr>
+      <tr><td>Шрифты</td><td>casual sans-serif (<code>font-sans</code>), <b>никогда</b> monospace</td></tr>
+      <tr><td>Масштаб</td><td>4xl–8xl / 2xl–4xl / sm–base</td></tr>
+      <tr><td>Transition</td><td><code>duration-200 ease-in-out</code> · active: <code>translate(2px) + shadow-none</code></td></tr>
+    </table>
+  </div>
+  <div class="dodont">
+    <div class="dd do"><h4>Делай</h4><ul>
+      <li>Пунктирные рамки — имитация рисованных линий</li>
+      <li>Кремовый бумажный фон #fffef5, чернильный #2c2c2c</li>
+      <li>Лёгкие повороты элементов (rotate 1–3°)</li>
+      <li>Цвета маркеров: red/teal/yellow</li>
+      <li>Тетрадные линии, скотч, кнопки, скрепки, следы кофе</li></ul></div>
+    <div class="dd dont"><h4>Нельзя</h4><ul>
+      <li>Градиенты (bg-gradient-*) и blur (backdrop-blur)</li>
+      <li>Точные тени shadow-md/lg/xl — только жёсткие офсетные</li>
+      <li>Monospace шрифты</li>
+      <li>Сплошные рамки border-solid</li>
+      <li>rounded-none или rounded-lg и больше</li></ul></div>
+  </div>
+</section>
+
+<!-- ============ STYLE 2 ============ -->
+<section id="s2" data-num="2">
+  <div class="sect-head"><span class="num">2</span><h2>Parallax Sections</h2><span class="runame">Параллакс-секции · скролл-сторителлинг</span></div>
+  <p class="desc">Полноэкранные секции с <b>фиксированным фоном</b> (bg-attachment: fixed), скроллящийся контент поверх — эффект глубины. Кинематографичный ритм duration-500/700. <b>Если нужен скролл-эффект — это стиль №2.</b></p>
+  <div class="panel"><h3>Живое демо · background-attachment: fixed</h3>
+    <div class="demo"><div class="demo-tag"><span>прокрути коробку мышкой / трекпадом</span><span>секции минимум 100% высоты</span></div>
+      <div class="dd2">
+        <div class="sec s-a"><h4>Бренд-история</h4><p>Фон закреплён, контент едет над ним — глубина без лишних слоёв. Полупрозрачная подложка bg-white/15 + blur для читаемости.</p></div>
+        <div class="sec s-b"><h4>Продукт</h4><p>Секции min-h-screen сохраняют ритм; акценты глубины через opacity/blur, без резких движений.</p></div>
+        <div class="sec s-c"><h4>Призыв к действию</h4><p>Короткая финальная секция-склейка с градиентом-переходом.</p></div>
+        <div class="sc">↓ скролль</div>
+      </div>
+    </div>
+  </div>
+  <div class="phrases">
+    <button class="copybtn main" data-copy="Возьми тему как в «Parallax Sections» (stylekit, стиль #2). Токены: stylekit/tokens/parallax-sections.tokens.json (+ .css, .tailwind.preset.js); правила: stylekit/DESIGN_SPEC.md раздел 2.">📋 Тема целиком</button>
+    <button class="copybtn" data-copy="Возьми анимацию скролла из «Parallax Sections» (stylekit #2): background-attachment: fixed на секциях, min-h-screen, sticky-элементы, полупрозрачные подложки под контентом, easing duration-500/700 для кинематографичного ритма, деградация параллакса на мобильных.">Анимация скролла</button>
+    <button class="copybtn" data-copy="Возьми стиль секций из «Parallax Sections» (stylekit #2): полноэкранные секции с bg-fixed, полупрозрачные слои контента bg-white/90, рамка border-white/20, радиус rounded-2xl, тени shadow-xl→2xl.">Секции</button>
+    <button class="copybtn" data-copy="Возьми палитру из «Parallax Sections» (stylekit #2): #1e3a5f / #f8fafc / #3b82f6 / #93c5fd / #0ea5e9 / #c559f0 — бодрый синий фон и светлые акценты.">Палитра</button>
+  </div>
+  <div class="panel"><h3>Токены</h3>
+    <table class="tok"><tr><th>Токен</th><th>Значение</th></tr>
+      <tr><td>Основной</td><td><code>#1e3a5f</code> · глубокий синий</td></tr>
+      <tr><td>Вторичный</td><td><code>#f8fafc</code></td></tr>
+      <tr><td>Акценты</td><td><code>#3b82f6</code> <code>#93c5fd</code> <code>#0ea5e9</code> <code>#c559f0</code></td></tr>
+      <tr><td>Border / Radius</td><td><code>border border-white/20</code> · <code>rounded-2xl</code></td></tr>
+      <tr><td>Тени</td><td><code>shadow-xl</code> → hover <code>shadow-2xl</code></td></tr>
+      <tr><td>Шрифты</td><td><code>font-bold tracking-tight</code> / <code>font-sans leading-relaxed</code></td></tr>
+      <tr><td>Масштаб</td><td>6xl–8xl / 4xl–5xl / lg–xl</td></tr>
+      <tr><td>Transition</td><td><code>duration-300</code>; для кино-ритма <code>500/700</code> · active: <code>scale-95</code></td></tr>
+    </table>
+  </div>
+  <div class="dodont">
+    <div class="dd do"><h4>Делай</h4><ul>
+      <li>bg-fixed для параллакса; все секции min-h-screen</li>
+      <li>Контент на полупрозрачных подложках (bg-white/90)</li>
+      <li>sticky top-0 для прилипаний; bg-cover bg-center для картинок</li>
+      <li>Depth через opacity/blur — крупные сдвиги запрещены</li>
+      <li>Длинные easing 500/700 для нарратива</li></ul></div>
+    <div class="dd dont"><h4>Нельзя</h4><ul>
+      <li>bg-scroll ломает эффект</li>
+      <li>rounded-none / shadow-none</li>
+      <li>Слабый контраст фон↔контент</li>
+      <li>Разные высоты секций, переизбыток слоёв</li>
+      <li>Дёрганые короткие анимации</li></ul></div>
+  </div>
+</section>
+
+<!-- ============ STYLE 3 ============ -->
+<section id="s3" data-num="3">
+  <div class="sect-head"><span class="num">3</span><h2>Shader Gradient</h2><span class="runame">Шейдерный градиент · живой WebGL-фон</span></div>
+  <p class="desc">Премиум-эстетика в духе Stripe / Linear / Vercel: <b>настоящий WebGL fragment-shader</b> (fbm domain warp) рисует «дышащее» переливающееся поле на почти чёрном канвасе, над ним парят матовые стеклянные панели. Один яркий акцент — фиолетовый <code>#7C5CFF</code>.</p>
+  <div class="panel"><h3>Живое демо · реальный WebGL-шейдер</h3>
+    <div class="demo"><div class="demo-tag"><span>fragment shader рендерится в реальном времени</span><span>панель — frosted glass (blur 18px)</span></div>
+      <div class="dd3">
+        <canvas id="gl" width="800" height="240" aria-hidden="true"></canvas>
+        <div class="b">Начать бесплатно</div>
+        <div class="glass"><h4>Живой градиент</h4><p>fbm domain warp + time uniform · ни одного CSS-градиента и animate-pulse</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="phrases">
+    <button class="copybtn main" data-copy="Возьми тему как в «Shader Gradient» (stylekit, стиль #3). Токены: stylekit/tokens/shader-gradient.tokens.json (+ .css, .tailwind.preset.js); правила WebGL-требований: stylekit/DESIGN_SPEC.md раздел 3.">📋 Тема целиком</button>
+    <button class="copybtn" data-copy="Возьми живой шейдерный фон из «Shader Gradient» (stylekit #3): WebGL fragment shader fbm domain warp на почти чёрном #08090D, DPR cap 2, пауза rAF вне экрана (IntersectionObserver), prefers-reduced-motion → 1 статичный кадр, fallback на статичный CSS-градиент; никаких CSS-градиентов/animate-pulse для имитации.">Живой фон</button>
+    <button class="copybtn" data-copy="Возьми стеклянные панели из «Shader Gradient» (stylekit #3): backdrop-blur 18px+, фон white/6, рамка 1px white/10, скругление rounded-2xl, тень 0 20px 60px rgba(0,0,0,.45); текст на панели, не прямо на градиенте.">Стеклянные панели</button>
+    <button class="copybtn" data-copy="Возьми стиль кнопок из «Shader Gradient» (stylekit #3): тёмная полупрозрачная кнопка с фиолетовым акцентом #7C5CFF, rounded-2xl, hover — мягкое свечение rgba(124,92,255,.25), active scale 0.98, transition 300ms ease-out.">Кнопки</button>
+    <button class="copybtn" data-copy="Возьми палитру из «Shader Gradient» (stylekit #3): #08090D / #EDEEF2 / #7C5CFF / #22D3EE / #F472B6 — один фиолетовый UI-акцент, поле переливается шейдером.">Палитра</button>
+  </div>
+  <div class="panel"><h3>Токены</h3>
+    <table class="tok"><tr><th>Токен</th><th>Значение</th></tr>
+      <tr><td>Основной</td><td><code>#08090D</code> · почти чёрный канвас</td></tr>
+      <tr><td>Вторичный</td><td><code>#EDEEF2</code></td></tr>
+      <tr><td>Акценты</td><td><code>#7C5CFF</code> <code>#22D3EE</code> <code>#F472B6</code> — единственный UI-акцент фиолетовый</td></tr>
+      <tr><td>Border / Radius</td><td><code>border-white/10</code> · <code>rounded-2xl</code></td></tr>
+      <tr><td>Тени</td><td><code>0_20px_60px rgba(0,0,0,.45)</code> → hover <code>0_24px_70px rgba(124,92,255,.25)</code></td></tr>
+      <tr><td>Шрифты</td><td><code>font-semibold text-white tracking-tight</code> / <code>text-white/70</code></td></tr>
+      <tr><td>Масштаб</td><td>5xl–7xl / 3xl–4xl / base–lg</td></tr>
+      <tr><td>Transition</td><td><code>duration-300 ease-out</code> · active: <code>scale-[0.98]</code></td></tr>
+    </table>
+  </div>
+  <div class="dodont">
+    <div class="dd do"><h4>Делай</h4><ul>
+      <li>Настоящий fbm-шейдер + time/resolution uniforms</li>
+      <li>DPR cap 2, resize канваса при изменении</li>
+      <li>Пауза rAF вне экрана; reduced-motion → 1 кадр</li>
+      <li>Фолбэк: статичный CSS-градиент без WebGL</li>
+      <li>Контент только на стеклянных панелях / scrim 4.5:1</li></ul></div>
+    <div class="dd dont"><h4>Нельзя</h4><ul>
+      <li>Фейковый градиент: PNG или CSS-анимация вместо шейдера</li>
+      <li>CSS-стопы-клише from-indigo-600 via-purple-600 to-pink-500</li>
+      <li>animate-pulse, duration-100, много канвасов/акцентов</li>
+      <li>Текст прямо на поле без панели</li>
+      <li>Анимация позиции/теней DOM — отбирает GPU у шейдера</li></ul></div>
+  </div>
+</section>
+
+<!-- ============ STYLE 4 ============ -->
+<section id="s4" data-num="4">
+  <div class="sect-head"><span class="num">4</span><h2>Apple Liquid Glass</h2><span class="runame">Жидкое стекло · WWDC 2025</span></div>
+  <p class="desc">Язык Apple поверх традиционного глассморфизма: <b>blur 40px + saturate 1.8</b>, радужные ореолы-рамки, градиентные заголовки с толстым stroke и 3D-тенью, большие скругления 24px, «текучие» переходы 500ms.</p>
+  <div class="panel"><h3>Живое демо · blur(40px) saturate(1.8)</h3>
+    <div class="demo"><div class="demo-tag"><span>hover по кнопкам</span><span>наведи на цветные блобы — светятся сквозь стекло</span></div>
+      <div class="dd4">
+        <i class="blob bl1"></i><i class="blob bl2"></i>
+        <div class="gcard">
+          <h4>Liquid Glass</h4>
+          <p>Толстый stroke 2–3px, 3D-тень 4px 4px, градиентная заливка заголовка, свечение подзаголовка.</p>
+          <div class="row"><button class="gbtn hl">Первичное</button><button class="gbtn">Вторичное</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="phrases">
+    <button class="copybtn main" data-copy="Возьми тему как в «Apple Liquid Glass» (stylekit, стиль #4). Токены: stylekit/tokens/liquid-glass.tokens.json (+ .css, .tailwind.preset.js); правила: stylekit/DESIGN_SPEC.md раздел 4.">📋 Тема целиком</button>
+    <button class="copybtn" data-copy="Возьми стеклянные панели из «Apple Liquid Glass» (stylekit #4): bg white/10–15, border white/20, backdrop-blur[40px] + saturate[1.8], rounded-[24px]/rounded-3xl, тень shadow-xl black/10; любые непрозрачные bg-white/bg-black запрещены.">Стеклянные панели</button>
+    <button class="copybtn" data-copy="Возьми стиль кнопок из «Apple Liquid Glass» (stylekit #4): полупрозрачные pill/24px кнопки white/14 + border white/25, hover свечение accent, active scale 0.98, transition 500ms ease-out.">Кнопки</button>
+    <button class="copybtn" data-copy="Возьми типографику из «Apple Liquid Glass» (stylekit #4): заголовки font-black с градиентной заливкой #a855f7→#ff2d92→#a855f7 (bg-clip-text), stroke 3px (h1/h2 минимум 2px) #4ecdc4, 3D-тень text-shadow 4px 4px 0 rgba(0,0,0,.5), свечение субтитров 0 0 20px rgba(78,205,196,.8).">Типографика</button>
+    <button class="copybtn" data-copy="Возьми палитру из «Apple Liquid Glass» (stylekit #4): white 10–15% стекло + акценты #ff6b6b #4ecdc4 #a855f7 #007AFF #FF2D55.">Палитра</button>
+  </div>
+  <div class="panel"><h3>Токены</h3>
+    <table class="tok"><tr><th>Токен</th><th>Значение</th></tr>
+      <tr><td>Стекло primary/secondary</td><td><code>rgba(255,255,255,.1)</code> / <code>rgba(255,255,255,.15)</code></td></tr>
+      <tr><td>Акценты</td><td><code>#ff6b6b</code> <code>#4ecdc4</code> <code>#a855f7</code> <code>#007AFF</code> <code>#FF2D55</code></td></tr>
+      <tr><td>Border / Radius</td><td><code>border-white/20</code> · <code>rounded-[24px]</code> / <code>rounded-3xl</code></td></tr>
+      <tr><td>Blur</td><td><code>backdrop-blur-[40px] backdrop-saturate-[1.8]</code> — обязательно</td></tr>
+      <tr><td>Тени</td><td><code>shadow-xl shadow-black/10</code> → hover <code>black/15</code></td></tr>
+      <tr><td>Заголовки</td><td>градиент bg-clip-text + stroke 3px + 3D-тень + glow</td></tr>
+      <tr><td>Масштаб</td><td>5xl–8xl / 3xl–4xl / sm–base</td></tr>
+      <tr><td>Transition</td><td><code>duration-500 ease-out</code> · active: <code>scale-[0.98]</code></td></tr>
+    </table>
+  </div>
+  <div class="dodont">
+    <div class="dd do"><h4>Делай</h4><ul>
+      <li>blur 40px+ и saturate 1.8+ везде</li>
+      <li>Радужные градиентные рамки преломления</li>
+      <li>Заголовки: градиент + stroke 3px + 3D-тень 4px 4px</li>
+      <li>Текучие медленные переходы 500ms</li>
+      <li>Огромные скругления 24px/3xl</li></ul></div>
+    <div class="dd dont"><h4>Нельзя</h4><ul>
+      <li>Непрозрачные bg-white/bg-black/bg-gray-*</li>
+      <li>Слабый blur (sm/base) — только 40px+</li>
+      <li>Просто белые заголовки без градиента/stroke/тени</li>
+      <li>rounded-none/sm или прямые углы</li>
+      <li>Быстрые переходы duration-100/150</li></ul></div>
+  </div>
+</section>
+
+<!-- ============ STYLE 5 ============ -->
+<section id="s5" data-num="5">
+  <div class="sect-head"><span class="num">5</span><h2>Paper Craft</h2><span class="runame">Бумажные ремёсла · papercut-слои</span></div>
+  <p class="desc">Многослойная бумага: карточки слегка повёрнуты, «бумажные» офсетные тени 4–5px, нижние слои на hover раскрываются веером (Layer Separation), тёплый кремовый фон. Для детских/образовательных продуктов и студий.</p>
+  <div class="panel"><h3>Живое демо · слои бумаги</h3>
+    <div class="demo"><div class="demo-tag"><span>hover по карточкам — слои «веером»</span></div>
+      <div class="dd5">
+        <h4>Мастерим из бумаги:</h4>
+        <div class="r">
+          <div class="pcard"><b>Приподнятая карточка</b><br>shadow 4px 4px 0 rgba(0,0,0,.08), rotate 1°, снизу «высовывается» слой 5cb8a5</div>
+          <div class="pcard b2"><b>Веер слоёв</b><br>на hover нижние слои расходятся в разные стороны — ручное отслоение</div>
+          <span><button class="pbtn">Главное действие</button> <span class="chipc" style="background:#f5c040">крафтовый чип</span> <span class="chipc" style="background:#6b7fb5">ещё чип</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="phrases">
+    <button class="copybtn main" data-copy="Возьми тему как в «Paper Craft» (stylekit, стиль #5). Токены: stylekit/tokens/paper-craft.tokens.json (+ .css, .tailwind.preset.js); правила: stylekit/DESIGN_SPEC.md раздел 5.">📋 Тема целиком</button>
+    <button class="copybtn" data-copy="Возьми стиль карточек из «Paper Craft» (stylekit #5): бумажные тени 4px 4px 0 rgba(0,0,0,.08), rotate ±1°, rounded-xl, layer separation — нижние слои расходятся на hover, тень растёт синхронно со сдвигом.">Карточки</button>
+    <button class="copybtn" data-copy="Возьми стиль кнопок из «Paper Craft» (stylekit #5): offset-тень 3px 3px 0 rgba(0,0,0,.1), rounded-xl (неровные), hover приподнимает -1px и тень 4px, active вдавливает 1px и тень почти нулевая, без пружинных кривых.">Кнопки</button>
+    <button class="copybtn" data-copy="Возьми палитру из «Paper Craft» (stylekit #5): #e85d75 / #fdf6ee / #5cb8a5 / #f5c040 / #6b7fb5 / #81a7e2 — тёплый крафт, без неона и флуоресценции.">Палитра</button>
+  </div>
+  <div class="panel"><h3>Токены</h3>
+    <table class="tok"><tr><th>Токен</th><th>Значение</th></tr>
+      <tr><td>Основной</td><td><code>#e85d75</code></td></tr>
+      <tr><td>Вторичный</td><td><code>#fdf6ee</code> · тёплый крем</td></tr>
+      <tr><td>Акценты</td><td><code>#5cb8a5</code> <code>#f5c040</code> <code>#6b7fb5</code> <code>#81a7e2</code></td></tr>
+      <tr><td>Border / Radius</td><td><code>border-2 #e0d8cc</code> · <code>rounded-xl</code></td></tr>
+      <tr><td>Тени</td><td><code>4px_4px_0 rgba(0,0,0,.08)</code> → hover <code>5px_5px_0 .12</code></td></tr>
+      <tr><td>Шрифты</td><td><code>font-bold</code> / <code>font-sans</code> (округлый или «рукописный» характер)</td></tr>
+      <tr><td>Масштаб</td><td>4xl–7xl / 2xl–3xl / sm–base</td></tr>
+      <tr><td>Transition</td><td><code>duration-200</code> · active: <code>translate-y .5 + shadow 1px</code></td></tr>
+    </table>
+  </div>
+  <div class="dodont">
+    <div class="dd do"><h4>Делай</h4><ul>
+      <li>Тёплый светлый фон, слои через box-shadow</li>
+      <li>rotate ±1°, «неровные» скругления rounded-xl</li>
+      <li>Крафтовые яркие блоки #e85d75/#5cb8a5/#f5c040</li>
+      <li>Hover: поднять −1px и увеличить офсет тени</li>
+      <li>Фокус инпута: глубокая inset-тень (вырез в картоне)</li></ul></div>
+    <div class="dd dont"><h4>Нельзя</h4><ul>
+      <li>Тёмный фон, неон, металлик, глассморфизм</li>
+      <li>Свечения и drop-shadow-фильтры</li>
+      <li>Точные прямые углы</li>
+      <li>Пружинные bounce-кривые</li>
+      <li>Слои едут в одну сторону на hover</li></ul></div>
+  </div>
+</section>
+
+<!-- ============ STYLE 6 ============ -->
+<section id="s6" data-num="6">
+  <div class="sect-head"><span class="num">6</span><h2>Bento Grid</h2><span class="runame">Бенто-сетка · неровные карточки</span></div>
+  <p class="desc">CSS Grid с карточками разного размера (col-span-2, row-span-2) как в бенто-боксе: главные фичи — крупно, второстепенное — мелко. Hover: подъём −2px + расцветание тени + scale иконки 1.12.</p>
+  <div class="panel"><h3>Живое демо · grid-cols-4</h3>
+    <div class="demo"><div class="demo-tag"><span>hover по ячейкам</span></div>
+      <div class="dd6">
+        <div class="grid">
+          <h4>Всё в одной сетке</h4>
+          <div class="bcell big"><div class="ico c1">◆</div><b>Карточка 2×2</b><br>главный контент получает площадь; aspect-ratio держит пропорцию</div>
+          <div class="bcell"><div class="ico c2">▲</div><span>Карточка 1×1</span></div>
+          <div class="bcell"><div class="ico c3">●</div><span>Карточка 1×1</span></div>
+          <div class="bcell"><div class="ico c4">■</div><span>Карточка 1×1</span></div>
+          <div class="bcell big"><div class="ico c3">✦</div><b>Ещё модуль 2×2</b><br>зазор всегда одинаковый: gap-4/gap-6, радиус rounded-2xl</div>
+          <div class="bcell"><div class="ico c1">✚</div><span>Карточка 1×1</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="phrases">
+    <button class="copybtn main" data-copy="Возьми тему как в «Bento Grid» (stylekit, стиль #6). Токены: stylekit/tokens/bento-grid.tokens.json (+ .css, .tailwind.preset.js); правила: stylekit/DESIGN_SPEC.md раздел 6.">📋 Тема целиком</button>
+    <button class="copybtn" data-copy="Возьми сетку-бенто из «Bento Grid» (stylekit #6): CSS grid grid-cols-4, карточки col-span-2/row-span-2, единый gap-4/6, rounded-2xl, крупные карточки под главное, aspect-ratio для пропорций.">Сетка-бенто</button>
+    <button class="copybtn" data-copy="Возьми стиль карточек из «Bento Grid» (stylekit #6): белый фон, border zinc-100, rounded-2xl, тень compact→wide на hover (shadow-sm→shadow-xl), lift -2px + scale 1.01, иконка group-hover:scale-110 и смена цвета.">Карточки</button>
+    <button class="copybtn" data-copy="Возьми палитру из «Bento Grid» (stylekit #6): #18181b / #fafafa + акценты #3b82f6 #8b5cf6 #ec4899 #f97316.">Палитра</button>
+  </div>
+  <div class="panel"><h3>Токены</h3>
+    <table class="tok"><tr><th>Токен</th><th>Значение</th></tr>
+      <tr><td>Основной</td><td><code>#18181b</code></td></tr>
+      <tr><td>Вторичный</td><td><code>#fafafa</code></td></tr>
+      <tr><td>Акценты</td><td><code>#3b82f6</code> <code>#8b5cf6</code> <code>#ec4899</code> <code>#f97316</code></td></tr>
+      <tr><td>Border / Radius</td><td><code>border zinc-100</code> (dark: zinc-800) · <code>rounded-2xl</code></td></tr>
+      <tr><td>Тени</td><td><code>shadow-md</code> → hover <code>shadow-md + −translate-y-0.5</code></td></tr>
+      <tr><td>Шрифты</td><td><code>font-semibold</code> zinc-900/zinc-100 · body zinc-600/zinc-400</td></tr>
+      <tr><td>Масштаб</td><td>4xl–6xl / 2xl–3xl / sm–base</td></tr>
+      <tr><td>Transition</td><td><code>duration-200 ease-out</code> · active: <code>scale-95</code></td></tr>
+    </table>
+  </div>
+  <div class="dodont">
+    <div class="dd do"><h4>Делай</h4><ul>
+      <li>Разные размеры ячеек; главное — крупно; воздух в карточках</li>
+      <li>Единый gap-4/6 и радиусы xl/2xl/3xl</li>
+      <li>Hover: lift −2px, scale 1.01, тень sm→xl</li>
+      <li>Иконки внутри: смена цвета / scale-110 на group-hover</li>
+      <li>aspect-ratio для стабильных пропорций</li></ul></div>
+    <div class="dd dont"><h4>Нельзя</h4><ul>
+      <li>Все ячейки одинаковые — теряется «бенто»</li>
+      <li>Острые углы и gap-1/2/10/12</li>
+      <li>Жёсткие тени shadow-[Xpx_Ypx_0px]</li>
+      <li>Переполненный контент без whitespace</li></ul></div>
+  </div>
+</section>
+
+<!-- ============ STYLE 7 ============ -->
+<section id="s7" data-num="7">
+  <div class="sect-head"><span class="num">7</span><h2>Fullscreen Hero</h2><span class="runame">Полноэкранный герой · фото/видео на 100vh</span></div>
+  <p class="desc">Первый экран: фон на всю высоту (h-screen, object-cover), затемнение-градиент под текстом, крупный белый заголовок, CTA-«пилюли» с эффектом гравитационного парения (hover −3px с глубокой тенью). Никаких теней у текста на фоне — только контраст слоёв.</p>
+  <div class="panel"><h3>Живое демо · 100vh + overlay</h3>
+    <div class="demo"><div class="demo-tag"><span>hover по CTA — «парение»</span></div>
+      <div class="dd7">
+        <div class="peaks"></div>
+        <div class="inner">
+          <span class="kicker">Запуск · Сезон 2026</span>
+          <h4>Первый экран, который останавливает скролл</h4>
+          <p>Текст только поверх затемнения: градиент rgba(0,0,0,.28→.75) гарантирует читабельность.</p>
+          <div class="row"><button class="hbtn p">Попробовать</button><button class="hbtn g">Подробнее</button></div>
+        </div>
+        <div class="scroll">↓ скролль, чтобы продолжить</div>
+      </div>
+    </div>
+  </div>
+  <div class="phrases">
+    <button class="copybtn main" data-copy="Возьми тему как в «Fullscreen Hero» (stylekit, стиль #7). Токены: stylekit/tokens/hero-fullscreen.tokens.json (+ .css, .tailwind.preset.js); правила: stylekit/DESIGN_SPEC.md раздел 7.">📋 Тема целиком</button>
+    <button class="copybtn" data-copy="Возьми hero-секцию как в «Fullscreen Hero» (stylekit #7): min-h-screen фон (object-cover или muted autoplay video + fallback картинка), градиентное затемление rgba(0,0,0,.28→.75) под текстом, контент flex-центр, индикатор скролла вниз.">Hero-секция</button>
+    <button class="copybtn" data-copy="Возьми стиль кнопок из «Fullscreen Hero» (stylekit #7): pill-круглые (rounded-full), белые на затемнении, hover -translate-y + глубокая тень 0 8px 28px rgba(0,0,0,.5) (гравитационное парение), active scale .98 + focus ring white/80; карточки фич класс group + hover -translate-y-2.">Кнопки CTA</button>
+    <button class="copybtn" data-copy="Возьми палитру из «Fullscreen Hero» (stylekit #7): #ffffff / #000000 + акценты #ff6b6b #4ecdc4 #ffe66d #6c5ce7; никаких светло-серых тем и теней у текста — только overlay и контраст.">Палитра</button>
+  </div>
+  <div class="panel"><h3>Токены</h3>
+    <table class="tok"><tr><th>Токен</th><th>Значение</th></tr>
+      <tr><td>Основной</td><td><code>#ffffff</code> (текст на фоне)</td></tr>
+      <tr><td>Вторичный</td><td><code>#000000</code> (overlay)</td></tr>
+      <tr><td>Акценты</td><td><code>#ff6b6b</code> <code>#4ecdc4</code> <code>#ffe66d</code> <code>#6c5ce7</code></td></tr>
+      <tr><td>Border / Radius</td><td><code>border-2 border-white</code> · <code>rounded-full</code></td></tr>
+      <tr><td>Тени</td><td><code>shadow-none</code> у элементов; глубину даёт overlay; у CTA — только hover-глубина</td></tr>
+      <tr><td>Шрифты</td><td><code>font-bold leading-tight</code> / <code>font-sans</code></td></tr>
+      <tr><td>Масштаб</td><td>5xl–8xl / 3xl–5xl / lg–2xl</td></tr>
+      <tr><td>Transition</td><td><code>duration-300</code> · active: <code>scale-95</code>, focus ring white/80</td></tr>
+    </table>
+  </div>
+  <div class="dodont">
+    <div class="dd do"><h4>Делай</h4><ul>
+      <li>h-screen + object-cover; видео muted+autoplay с фолбэком картинки</li>
+      <li>Градиент/полупрозрачный затемняющий слой под текстом</li>
+      <li>Индикатор скролла вниз</li>
+      <li>CTA hover «парение» + active scale, focus ring</li>
+      <li>Карточки фич: group + icon group-hover:scale-110</li></ul></div>
+    <div class="dd dont"><h4>Нельзя</h4><ul>
+      <li>Текст на сложном фоне без затемнения</li>
+      <li>Тени shadow-sm..xl у текста/элементов на фоне</li>
+      <li>Видео со звуком на autoplay</li>
+      <li>Забивать экран целиком без «воздуха»</li>
+      <li>Светло-серые темы (bg-gray-50 и т.п.)</li></ul></div>
+  </div>
+</section>
+
+<!-- ============ STYLE 8 ============ -->
+<section id="s8" data-num="8">
+  <div class="sect-head"><span class="num">8</span><h2>Dopamine Design</h2><span class="runame">Дофаминовый дизайн · неон-максимализм</span></div>
+  <p class="desc">Тенденция 2025–2026: высоконасыщенные неоновые цвета, гигантские font-black заголовки, кнопки-пилюли, цветные свечения-тени вместо серых, градиентные фоны и эмодзи. Серые зоны запрещены — цвет стимулирует дофамин.</p>
+  <div class="panel"><h3>Живое демо · неоновый градиент</h3>
+    <div class="demo"><div class="demo-tag"><span>hover по кнопкам — scale 1.05</span></div>
+      <div class="dd8">
+        <h4>Настроение на максимум 💥 🎉</h4>
+        <div class="r">
+          <button class="dbtn b1">Тыкни 🚀</button>
+          <button class="dbtn b2">Ещё! ✨</button>
+          <span class="dbadge">🏆 топ-скидка</span>
+          <div class="dcard"><b>Пилюльные кнопки + цветные тени</b><br>shadow 0 8px 30px rgba(255,0,110,.4) — никаких серых теней; rounded-full/3xl</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="phrases">
+    <button class="copybtn main" data-copy="Возьми тему как в «Dopamine Design» (stylekit, стиль #8). Токены: stylekit/tokens/dopamine-design.tokens.json (+ .css, .tailwind.preset.js); правила: stylekit/DESIGN_SPEC.md раздел 8.">📋 Тема целиком</button>
+    <button class="copybtn" data-copy="Возьми стиль кнопок из «Dopamine Design» (stylekit #8): пилюли rounded-full px-8, яркие заливки #ffbe0b/#06d6a0/#ff006e, цветные тени 0 8px 30px rgba(255,0,110,.4), hover scale 1.05, active scale .95.">Кнопки</button>
+    <button class="copybtn" data-copy="Возьми бейджи и цветные тени из «Dopamine Design» (stylekit #8): белые пилюли с цветным свечением (pink/purple/blue), никаких shadow-md/lg — только цветные glow-тени.">Бейджи и тени</button>
+    <button class="copybtn" data-copy="Возьми палитру из «Dopamine Design» (stylekit #8): #ff006e / #8338ec / #ffbe0b / #3a86ff / #06d6a0 / #fb5607 — максимальная насыщенность, серое запрещено.">Палитра</button>
+    <button class="copybtn" data-copy="Возьми типографику из «Dopamine Design» (stylekit #8): гигантские заголовки text-5xl–7xl font-black tracking-tight leading-[0.95], эмодзи приветствуются; serif и корпоративная строгость запрещены.">Типографика</button>
+  </div>
+  <div class="panel"><h3>Токены</h3>
+    <table class="tok"><tr><th>Токен</th><th>Значение</th></tr>
+      <tr><td>Основной</td><td><code>#ff006e</code></td></tr>
+      <tr><td>Вторичный</td><td><code>#8338ec</code></td></tr>
+      <tr><td>Акценты</td><td><code>#ffbe0b</code> <code>#3a86ff</code> <code>#06d6a0</code> <code>#fb5607</code></td></tr>
+      <tr><td>Border / Radius</td><td><code>border-2 #ff006e/20</code> · <code>rounded-3xl</code> / full / 2xl</td></tr>
+      <tr><td>Тени</td><td><code>0_8px_30px rgba(255,0,110,.4)</code> → hover <code>0_12px_40px .6</code></td></tr>
+      <tr><td>Шрифты</td><td><code>font-black tracking-tight</code> / <code>font-medium</code></td></tr>
+      <tr><td>Масштаб</td><td>5xl–7xl (black, leading .95) / xl–2xl / base</td></tr>
+      <tr><td>Transition</td><td><code>duration-300</code> (bouncy scale) · active: <code>scale-95</code></td></tr>
+    </table>
+  </div>
+  <div class="dodont">
+    <div class="dd do"><h4>Делай</h4><ul>
+      <li>Максимальная насыщенность: pink/purple/blue/yellow</li>
+      <li>Пилюли rounded-full px-8, максимум радиуса</li>
+      <li>Гигантские заголовки font-black</li>
+      <li>Цветные тени-свечения, градиентные фоны</li>
+      <li>Упругий hover scale-105, эмодзи и игривые иконки</li></ul></div>
+    <div class="dd dont"><h4>Нельзя</h4><ul>
+      <li>Большие серые зоны (gray-100..500)</li>
+      <li>Пастель и десатурированные цвета</li>
+      <li>Мелкие радиусы sm/md</li>
+      <li>Serif и корпоративная типографика</li>
+      <li>Чёрно-серые тени shadow-lg</li></ul></div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+/* ------ copy phrases ------ */
+const toast=document.getElementById('toast');let tt;
+function showToast(msg){toast.textContent=msg;toast.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('show'),1600)}
+document.addEventListener('click',async e=>{
+  const sw=e.target.closest('.sw');
+  if(sw){try{await navigator.clipboard.writeText(sw.dataset.hex)}catch(x){}
+    showToast(sw.dataset.hex+' скопирован ✓');return;}
+  const b=e.target.closest('[data-copy]');if(!b)return;
+  const txt=b.dataset.copy;
+  try{await navigator.clipboard.writeText(txt)}catch(x){
+    const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();
+  }
+  showToast('Скопировано агенту ✓');
+});
+
+/* ------ scrollspy ------ */
+const navitems=[...document.querySelectorAll('[data-num]')];
+const obs=new IntersectionObserver(es=>{
+  es.forEach(en=>{
+    if(en.isIntersecting){
+      const n=en.target.dataset.num;
+      navitems.forEach(a=>a.classList.toggle('active',a.dataset.num===n));
+    }
+  })
+},{rootMargin:'-30% 0px -60% 0px'});
+document.querySelectorAll('section[data-num]').forEach(s=>obs.observe(s));
+
+/* ------ overview cards + palette swatches ------ */
+const styles=[
+ {n:1,name:'Hand-Drawn Doodle',ru:'Дудл · тетрадь',pal:['#2c2c2c','#fffef5','#ff6b6b','#4ecdc4','#ffd93d','#a98d16'],lab:['основной','бумага','маркер красный','маркер бирюзовый','маркер жёлтый','маркер оливковый']},
+ {n:2,name:'Parallax Sections',ru:'Параллакс-скролл',pal:['#1e3a5f','#f8fafc','#3b82f6','#93c5fd','#0ea5e9','#c559f0'],lab:['основной','вторичный','акцент 1','акцент 2','акцент 3','акцент 4']},
+ {n:3,name:'Shader Gradient',ru:'Живой WebGL-градиент',pal:['#08090D','#EDEEF2','#7C5CFF','#22D3EE','#F472B6'],lab:['канвас','текст','UI-акцент','шейдер','шейдер']},
+ {n:4,name:'Apple Liquid Glass',ru:'Жидкое стекло',pal:['rgba(255,255,255,.24)','#ff6b6b','#4ecdc4','#a855f7','#007AFF','#FF2D55'],lab:['стекло','акцент 1','акцент 2','акцент 3','акцент 4','акцент 5']},
+ {n:5,name:'Paper Craft',ru:'Бумажные слои',pal:['#e85d75','#fdf6ee','#5cb8a5','#f5c040','#6b7fb5','#81a7e2'],lab:['основной','бумага','акцент 1','акцент 2','акцент 3','акцент 4']},
+ {n:6,name:'Bento Grid',ru:'Бенто-сетка',pal:['#18181b','#fafafa','#3b82f6','#8b5cf6','#ec4899','#f97316'],lab:['основной','вторичный','акцент 1','акцент 2','акцент 3','акцент 4']},
+ {n:7,name:'Fullscreen Hero',ru:'Полноэкранный hero',pal:['#ffffff','#000000','#ff6b6b','#4ecdc4','#ffe66d','#6c5ce7'],lab:['текст','overlay','акцент 1','акцент 2','акцент 3','акцент 4']},
+ {n:8,name:'Dopamine Design',ru:'Неон-максимализм',pal:['#ff006e','#8338ec','#ffbe0b','#3a86ff','#06d6a0','#fb5607'],lab:['основной','вторичный','акцент 1','акцент 2','акцент 3','акцент 4']}
+];
+document.getElementById('ovgrid').innerHTML=styles.map(s=>
+ `<a class="ov-card" href="#s${s.n}">
+    <span class="ov-bar">${s.pal.map(c=>`<i style="background:${c}"></i>`).join('')}</span>
+    <span class="body"><b>${s.n} · ${s.name}</b><span>${s.ru}</span></span>
+  </a>`).join('');
+document.querySelectorAll('section[data-num]').forEach(sec=>{
+  const st=styles.find(x=>x.n===+sec.dataset.num);const desc=sec.querySelector('.desc');
+  if(!st||!desc)return;
+  const p=document.createElement('div');p.className='panel';
+  p.innerHTML=`<h3>Палитра · клик по цвету = копировать HEX</h3><div class="pal">${
+    st.pal.map((c,i)=>`<div class="sw" data-hex="${c}" title="Клик — скопировать HEX"><span class="chip" style="background:${c}"></span><span class="lab"><span>${st.lab[i]||''}</span><span>${c}</span></span></div>`).join('')
+  }</div>`;
+  desc.insertAdjacentElement('afterend',p);
+});
+
+/* ------ WebGL shader demo (style 3) ------ */
+(function(){
+  const cv=document.getElementById('gl');if(!cv)return;
+  const gl=cv.getContext('webgl',{antialias:false});
+  const vsrc='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  const fsrc=`precision highp float;uniform vec2 u_res;uniform float u_time;
+  float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+  float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+    return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),f.x),f.y);}
+  float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*noise(p);p*=2.03;a*=.5;}return v;}
+  void main(){
+    vec2 uv=(gl_FragCoord.xy*2.-u_res)/min(u_res.x,u_res.y);
+    float t=u_time*.055;
+    vec2 q=vec2(fbm(uv*1.15+t*.7),fbm(uv*1.15-t*.5));
+    float r=fbm(uv*1.4+q*1.9+vec2(t*.6,0.));
+    vec3 col=vec3(.031,.035,.051);
+    col=mix(col,vec3(.486,.361,1.),smoothstep(.32,.8,r)* .95);
+    col=mix(col,vec3(.133,.827,.933),smoothstep(.5,.9,fbm(uv*2.1-q*1.6+t*.4))*.45);
+    col=mix(col,vec3(.957,.447,.714),smoothstep(.62,.95,r+q.x*.3)*.5);
+    col*=.9+.45*q.y;
+    gl_FragColor=vec4(col,1.);}`;
+  function sh(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o}
+  const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vsrc));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fsrc));gl.linkProgram(pr);gl.useProgram(pr);
+  const buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,-1,1,1,-1,1]),gl.STATIC_DRAW);
+  const loc=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+  const uRes=gl.getUniformLocation(pr,'u_res'),uT=gl.getUniformLocation(pr,'u_time');
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function size(){const dpr=Math.min(devicePixelRatio||1,2);const w=cv.clientWidth,h=cv.clientHeight;cv.width=w*dpr;cv.height=h*dpr;gl.viewport(0,0,cv.width,cv.height);}
+  size();addEventListener('resize',size);
+  let raf=0,t0=performance.now();
+  function frame(now){const t=(now-t0)/1000;gl.uniform2f(uRes,cv.width,cv.height);gl.uniform1f(uT,t);gl.drawArrays(gl.TRIANGLES,0,6);raf=requestAnimationFrame(frame);}
+  if(reduced){gl.uniform2f(uRes,cv.width,cv.height);gl.uniform1f(uT,42.0);gl.drawArrays(gl.TRIANGLES,0,6);return;}
+  let running=false;
+  const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting&&!running){running=true;raf=requestAnimationFrame(frame)}else if(!en.isIntersecting&&running){running=false;cancelAnimationFrame(raf)}})},{threshold:.05});
+  io.observe(cv);
+})();
+</script>
+</body>
+</html>
