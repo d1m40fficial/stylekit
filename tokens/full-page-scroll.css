@@ -1,0 +1,13 @@
+:root {
+  /* Full Page Scroll — StyleKit #9 */
+  --color-primary: #000000;
+  --color-secondary: #ffffff;
+  --color-accent-1: #6366f1;
+  --color-accent-2: #ec4899;
+  --color-accent-3: #14b8a6;
+  --color-accent-4: #f59e0b;
+  --fps-radius: 16px;
+  --fps-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+  --fps-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --fps-reveal-distance: 28px;
+}

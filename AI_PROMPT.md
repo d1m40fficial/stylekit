@@ -111,6 +111,14 @@ Blend in **Dopamine Design** as a secondary accent — apply it to highlighted s
 - Keywords: dopamine design, vibrant colors, high saturation, neon gradient, bold typography, colorful ui, playful design, maximalism
 - Palette: primary #ff006e, secondary #8338ec, accents #ffbe0b, #3a86ff, #06d6a0, #fb5607
 
+## Accent style: Full Page Scroll
+
+Blend in **Full Page Scroll** as a secondary accent — apply it to highlighted sections or standout components only; the base style above stays dominant. Key traits:
+
+- Keywords: full page scroll, fullscreen sections, scroll snap, snap scrolling, scroll storytelling, one scene per viewport, capsule nav dots, scroll reveal, intersection observer
+- Palette: primary #000000, secondary #ffffff, accents #6366f1, #ec4899, #14b8a6, #f59e0b
+- Motion: `scroll-snap-type: y mandatory` on the container, `scroll-snap-align: start` on every 100vh scene, `.65s cubic-bezier(.16,1,.3,1)` reveal from `opacity 0 / translateY(28px)`, reduced-motion fallback
+
 ---
 
 # RU (Русская версия)
@@ -219,3 +227,11 @@ Blend in **Dopamine Design** as a secondary accent — apply it to highlighted s
 
 - Ключевые слова: дофаминовый дизайн, яркие цвета, высокая насыщенность, неоновый градиент, жирная типографика, красочный UI, игривый дизайн, максимализм
 - Палитра: primary #ff006e, secondary #8338ec, акценты #ffbe0b, #3a86ff, #06d6a0, #fb5607
+
+## Акцентный стиль: Full Page Scroll (Полноэкранный скролл)
+
+Подмешай **Full Page Scroll** вторичным акцентом — применяй его только к выделенным секциям и заметным компонентам; базовый стиль выше остаётся доминирующим. Ключевые черты:
+
+- Ключевые слова: полноэкранный скролл, полноэкранные секции, scroll snap, снап-скролл, скролл-сторителлинг, одна сцена на экран, капсульные точки навигации, scroll reveal, IntersectionObserver
+- Палитра: primary #000000, secondary #ffffff, акценты #6366f1, #ec4899, #14b8a6, #f59e0b
+- Движение: `scroll-snap-type: y mandatory` на контейнере, `scroll-snap-align: start` на каждой 100vh-сцене, reveal `.65s cubic-bezier(.16,1,.3,1)` из `opacity 0 / translateY(28px)`, фолбэк для reduced-motion

@@ -1,7 +1,7 @@
 # Design Specification / Спецификация дизайна
 
-> EN: 8 styles. Each section: English first, Russian below; tables are shared.
-> RU: 8 стилей. В каждом разделе сначала английская версия, ниже русская; таблицы общие.
+> EN: 9 styles. Each section: English first, Russian below; tables are shared.
+> RU: 9 стилей. В каждом разделе сначала английская версия, ниже русская; таблицы общие.
 
 ## Styles / Стили
 
@@ -641,3 +641,72 @@ High-saturation neon palette, bold typography, energizing visual punch. 2025–2
 - RU: Никаких serif-шрифтов
 - EN: No black/gray shadows (`shadow-lg`)
 - RU: Никаких чёрных/серых теней (`shadow-lg`)
+
+---
+
+## 9. Full Page Scroll (全屏滚动)
+
+### EN
+Cinematic scroll storytelling: every scene takes the full viewport and the page behaves like a deck of cards. A scroll-snap container (`scroll-snap-type: y mandatory`) locks each transition to a complete scene; capsule navigation dots show position; content enters from emptiness with an IntersectionObserver reveal (`opacity 0 → 1`, `translateY(28px) → 0`). Dark canvas, one expressive accent per scene, no internal scrolling inside a scene.
+
+### RU
+Кинематографичный скролл-сторителлинг: каждая сцена занимает весь экран, а страница листается как колода карточек. Контейнер со `scroll-snap-type: y mandatory` фиксирует переход на целой сцене; капсульные точки показывают позицию; контент появляется из пустоты через IntersectionObserver (`opacity 0 → 1`, `translateY(28px) → 0`). Тёмный холст, один выразительный акцент на сцену, без внутреннего скролла внутри сцены.
+
+| Token | Value / Значение |
+| --- | --- |
+| Primary / Основной | `#000000` |
+| Secondary / Вторичный | `#ffffff` |
+| Accent 1 / Акцент 1 | `#6366f1` |
+| Accent 2 / Акцент 2 | `#ec4899` |
+| Accent 3 / Акцент 3 | `#14b8a6` |
+| Accent 4 / Акцент 4 | `#f59e0b` |
+| Border / Граница | `border border-white/10` |
+| Radius / Скругление | `rounded-2xl` |
+| Shadow (md) / Тень | `shadow-[0_24px_70px_rgba(0,0,0,0.45)]` |
+| Heading font / Заголовки | `Inter`, `font-black tracking-tight` |
+| Body font / Основной текст | `Inter`, `text-white/60 leading-relaxed` |
+| Type scale / Масштаб текста | `text-4xl md:text-5xl` / `text-3xl md:text-5xl` / `text-base md:text-lg` |
+| Spacing / Отступы | `min-h-screen` · `px-6 md:px-10` · `py-20 md:py-28` |
+| Transition / Переходы | `opacity/transform .65s cubic-bezier(.16,1,.3,1)` |
+| Active / Активное состояние | `scroll-snap-align: start` на каждой сцене |
+
+#### Never use in this style / Нельзя в этом стиле
+
+- EN: Inner scrolling inside a scene — content must never require its own scrollbar
+- RU: Внутренний скролл внутри сцены — контент не должен требовать собственной прокрутки
+- EN: Mixing `scroll-snap` with free-scrolling content in the same container
+- RU: Смешивать `scroll-snap` и свободный скролл в одном контейнере
+- EN: Identical nav dots without an active state
+- RU: Одинаковые точки навигации без активного состояния
+- EN: Revealing content without a `prefers-reduced-motion` fallback
+- RU: Появление контента без фолбэка для `prefers-reduced-motion`
+- EN: Heavy animations that steal the 60fps budget from scrolling
+- RU: Тяжёлые анимации, отбирающие 60fps у скролла
+
+#### Do / Правила
+
+- EN: Put `height: 100vh; overflow-y: auto; scroll-snap-type: y mandatory; scroll-behavior: smooth` on the scroll container
+- RU: Дай контейнеру `height: 100vh; overflow-y: auto; scroll-snap-type: y mandatory; scroll-behavior: smooth`
+- EN: Give every scene `min-height: 100vh; scroll-snap-align: start` and center its content
+- RU: Каждой сцене — `min-height: 100vh; scroll-snap-align: start` и центрирование контента
+- EN: Use one accent color and one message per scene
+- RU: Один акцентный цвет и одна мысль на сцену
+- EN: Reveal blocks with `opacity: 0; transform: translateY(28px)` and an IntersectionObserver that adds `.in`
+- RU: Показывай блоки через `opacity: 0; transform: translateY(28px)` и IntersectionObserver, добавляющий `.in`
+- EN: Show capsule nav dots: inactive `6×18px`, active `6×34px`, hover lighter
+- RU: Капсульные точки: неактивная `6×18px`, активная `6×34px`, hover светлее
+- EN: Under `prefers-reduced-motion`, show all reveal blocks immediately and disable smooth scrolling
+- RU: При `prefers-reduced-motion` сразу показывай все блоки и отключай плавный скролл
+
+#### Don't / Запреты
+
+- EN: No scene that overflows the viewport
+- RU: Никаких сцен, вылезающих за экран
+- EN: No missing scroll indicators or scene numbers
+- RU: Не оставляй пользователя без индикаторов скролла и номеров сцен
+- EN: No two scenes with the same accent
+- RU: Не повторяй один и тот же акцент в соседних сценах
+- EN: No reveal that runs before the block enters the viewport
+- RU: Не запускай reveal до того, как блок вошёл в экран
+
+---

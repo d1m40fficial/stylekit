@@ -4,7 +4,7 @@
 
 Style catalog and component-borrowing workflow for the `stylekit` project located at `C:\Belousov\Projects\stylekit` (GitHub: https://github.com/d1m40fficial/stylekit).
 
-8 styles with design tokens, CSS variables, Tailwind presets, rules, and a web cheat sheet with live demos: https://d1m40fficial.github.io/stylekit/
+9 styles with design tokens, CSS variables, Tailwind presets, rules, and a web cheat sheet with live demos: https://d1m40fficial.github.io/stylekit/
 
 ## Style catalog (numbered — canonical order used by the cheat sheet)
 
@@ -18,6 +18,7 @@ Style catalog and component-borrowing workflow for the `stylekit` project locate
 | 6 | bento-grid | Bento Grid | Бенто-сетка | irregular CSS-grid cards, mixed spans, rounded-2xl, hover lift + shadow bloom |
 | 7 | fullscreen-hero | Fullscreen Hero | Полноэкранный герой | 100vh image/video background, dark overlay, white text, gravity-float CTA |
 | 8 | dopamine-design | Dopamine Design | Дофаминовый дизайн | neon-high-saturation palette, pill buttons, colored shadows, font-black headings |
+| 9 | full-page-scroll | Full Page Scroll | Полноэкранный скролл | 100vh snap scenes, scroll reveal, capsule nav dots, one accent per scene |
 
 ## Data sources (read these, in this priority)
 
@@ -64,6 +65,7 @@ Follow `AI_PROMPT.md` pattern: base style is dominant; accent style applies only
 | User asks for | Source style |
 |---|---|
 | scroll animation, parallax depth, sticky sections | 2 Parallax Sections |
+| full-page snap scenes, scroll reveal, scroll storytelling | 9 Full Page Scroll |
 | living/animated gradient background | 3 Shader Gradient |
 | frosted glass panels, blur cards | 3 (dark) / 4 (Apple) Liquid Glass |
 | handcraft/paper/layered cards | 5 Paper Craft |
